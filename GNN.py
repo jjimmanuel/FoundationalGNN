@@ -27,10 +27,10 @@ class FoundationalGNN(nn.Module):
     )
 
 
-    def forward(self, data):
-      x = data.x
-      edge_attr = data.edge_attr
-      edge_index = data.edge_index
+    def forward(self):
+      x = self.dataset.x
+      edge_attr = self.dataset.edge_attr
+      edge_index = self.dataset.edge_index
 
       for layer in self.conv_layers:
         if isinstance(layer, GCNConv):
