@@ -6,11 +6,13 @@ class FoundationalGNN(nn.Module):
     self.hidden_dim = hidden_dim
   
     self.conv_layers = nn.ModuleList()
-    self.conv_layers.append(GCNConv(self.node_dim, hidden_dim))
+    #self.conv_layers.append(GCNConv(self.node_dim, hidden_dim))
+    self.conv_layers.append(EdgeConv(nn.Sequential(nn.Linear(2 * self.node_dim + self.edge_dim, hidden_dim), nn.ReLU(), nn.Linear(hidden_dim, hidden_dim))))
+    
 
     for _ in range(num_layers - 1):
-      self.conv_layers.append(nn.Relu())
-      self.conv_layers.append(GCNConv(hidden_dim, hidden_dim))
+      self.conv_layers.append(nn.ReLU())
+      self.conv_layers.append(EdgeConv(nn.Sequential(nn.Linear(2 * hidden_dim + self.edge_dim, hidden_dim), nn.ReLU(), nn.Linear(hidden_dim, hidden_dim))))
       self.conv_layers.append(nn.Dropout(dropout))
     
     self.dropout = nn.Dropout(dropout)
@@ -21,7 +23,7 @@ class FoundationalGNN(nn.Module):
     )
 
     self.edge_prediction = nn.Sequential(
-        nn.Linear(hidden_dim, hidden_dim),
+        nn.Linear(2*hidden_dim, hidden_dim),
         nn.ReLU(),
         nn.Linear(hidden_dim, self.edge_dim)
     )
@@ -33,8 +35,8 @@ class FoundationalGNN(nn.Module):
       edge_index = self.dataset.edge_index
 
       for layer in self.conv_layers:
-        if isinstance(layer, GCNConv):
-          x = layer(x, edge_index)
+        if isinstance(layer, EdgeConv):
+          x = layer(x, edge_index, edge_attr)
         else:
           x = layer(x)
       
