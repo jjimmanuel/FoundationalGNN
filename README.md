@@ -6,6 +6,6 @@ I would note that the Loss.py script is currently just a generic loss calculatio
 
 The Trainer.py script is also a generic training script. I need to do more work to ensure that I am properly defining the true vs pred tensors. Since the GNN outputs both a node_feature tensor and an edge_feature tensor, I will not be using the input batched tensor in my loss calculation. So I need to include the orig unmasked data in (probably?) a separate data_loader to loop through when training. 
 
-If you want to use the model for graph-level regression, you add a global pooling layer after the final dropout layer and then add an MLP layer with size (hidden_dim, 1). If you want to perform graph-level classification, just be sure to change the size of the nn.Linear() layer to size (hidden_dim, num_classes) as well as using the softmax (or logistic) activation function. 
+If you want to use the model for graph-level regression, you add a global pooling layer after the final dropout layer and then add an MLP layer with size (hidden_dim, 1). If you want to perform graph-level classification, just be sure to change the size of the nn.Linear() layer to size (hidden_dim, num_classes) as well as using the softmax activation function. 
 
-More work is definitely needed. For those of you who find this even slightly helpful, I would appreciate your feedback. 
+Feedback is appreciated. 
