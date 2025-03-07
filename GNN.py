@@ -6,7 +6,6 @@ class FoundationalGNN(nn.Module):
     self.hidden_dim = hidden_dim
   
     self.conv_layers = nn.ModuleList()
-    #self.conv_layers.append(GCNConv(self.node_dim, hidden_dim))
     self.conv_layers.append(EdgeConv(nn.Sequential(nn.Linear(2 * self.node_dim + self.edge_dim, hidden_dim), nn.ReLU(), nn.Linear(hidden_dim, hidden_dim))))
     
 
